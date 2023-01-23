@@ -10,15 +10,6 @@ export const getUsers = async (request: Request, response: Response) => {
     response.json (users);
 }
 
-export const getUser = async (request: Request, response: Response) => {
-    const user = await prisma.uploaduser.findUnique ({
-        where: {
-            id: +request.params.id
-        }
-    });
-    response.json (user);
-}
-
 export const createUser = async (request: Request, response: Response, next: NextFunction) => {
     const Error = validationResult (request);
     if (!Error.isEmpty ()) {
@@ -53,4 +44,23 @@ export const deleteUser = async (request: Request, response: Response) => {
             id: +request.params.id
         }
     })
+}
+
+export const uploadPicture = async (request: Request, response: Response, next: NextFunction) => {
+    if (!request.file) {
+        return next ("file missing");
+    }
+    const photoFileName = request.file.filename;
+    try {
+        await prisma.uploaduser.update ({
+            where: {
+                id: +request.params.id
+            },
+            data: {
+                photoFileName
+            }
+        })
+    } catch (error) {
+        next ("cannot upload picture");
+    }
 }
