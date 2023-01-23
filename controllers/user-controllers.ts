@@ -50,7 +50,7 @@ export const uploadPicture = async (request: Request, response: Response, next: 
     if (!request.file) {
         return next ("file missing");
     }
-    const photoFileName = request.file.filename;
+    const photoFileName = request.file?.filename;
     try {
         await prisma.uploaduser.update ({
             where: {
@@ -63,4 +63,5 @@ export const uploadPicture = async (request: Request, response: Response, next: 
     } catch (error) {
         next ("cannot upload picture");
     }
+    response.status(201).json({message: "image successfully uploaded"})
 }

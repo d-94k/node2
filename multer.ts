@@ -32,5 +32,5 @@ const getFileName = (mimeType: string) => {
 }
 
 export const initMulter = () => {
-    return multer ({storage, ...multerOptions});
+    return multer ({storage});
 }
